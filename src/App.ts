@@ -1,22 +1,31 @@
-import * as express from 'express';
+import express from 'express';
+import Router from './router';
+import swaggerUi from 'swagger-ui-express';
+import * as swaggerDocument from './swagger.json';
+import * as bodyParser from 'body-parser';
 
 class App {
-  public express
+  private httpServer: any
 
   constructor() {
-    this.express = express();
-    this.mountRoutes();
+    this.httpServer = express();
+
+    this.httpServer.use(bodyParser.urlencoded({ extended: true }));
+    this.httpServer.use(bodyParser.json());
+
+    new Router(this.httpServer);
+
+    this.httpServer.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
 
-  private mountRoutes(): void {
-    const router = express.Router();
-    router.get('/', (req, res) => {
-      res.json({
-        message: 'Hello World!',
-      });
-    });
-    this.express.use('/', router);
-  }
+  public Start = (port: number) => new Promise((resolve, reject) => {
+    this.httpServer.listen(
+      port,
+      () => {
+        resolve(port);
+      })
+      .on('error', (err: object) => reject(err));
+  })
 }
 
-export default new App().express;
+export default App;

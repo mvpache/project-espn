@@ -1,1 +1,1 @@
-https://blog.risingstack.com/building-a-node-js-app-with-typescript-tutorial/
+https://github.com/Sean-Bradley/Seans-TypeScript-NodeJS-CRUD-REST-API-Boilerplate
